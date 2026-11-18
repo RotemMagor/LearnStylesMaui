@@ -18,9 +18,9 @@ Routine eligibility for agent-owned work: Yes
 Ownership split: Full educator demo slice generated
 Practice offer: Student practice assignment created in Views/StudentExercisePage.xaml and Learning/Guides/Student-Practice-Assignment.md
 Test plan and coverage: Multi-platform compilation verification across iOS, Mac Catalyst, Android, Windows.
-Agent-owned changes: Converters, CustomStyles.xaml, Models, ViewModels, Views, AppShell, Guides
+Agent-owned changes: Converters, CustomStyles.xaml, Models, ViewModels, Views, AppShell, Guides, Fluent DI registration in MauiProgram.cs
 Student-owned tasks: Ready for students to complete practice tasks in StudentExercisePage.xaml
-Verification: dotnet build passed with 0 warnings and 0 errors across 4 platforms
-Completion criteria: Clean build, interactive multi-tab demo UI, and full step-by-step guides in Hebrew
+Verification: dotnet build, Audit-DI, Validate-Maui-ObsoleteApis, and Generate-Learning-Book-Pdf passed with 0 errors
+Completion criteria: Clean build, Fluent DI container methods with full Hebrew XML docs, interactive multi-tab demo UI, and validated PDF learning book
 Status: COMPLETE
 ```
