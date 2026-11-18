@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android</TargetFrameworks>
@@ -72,5 +72,9 @@
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <PackageReference Include="Microsoft.Maui.DevFlow.Agent" Version="0.1.0-preview.14.26567.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Learning\MAUI-Learning-Book.pdf" Link="Docs\MAUI-Learning-Book.pdf" />
   </ItemGroup>
 </Project>
