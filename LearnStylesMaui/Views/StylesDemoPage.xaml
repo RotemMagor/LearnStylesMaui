@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LearnStylesMaui.ViewModels"
+             x:Class="LearnStylesMaui.Views.StylesDemoPage"
+             x:DataType="vm:StylesDemoViewModel"
+             Title="גלריית סגנונות (Styles)"
+             FlowDirection="RightToLeft">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- כותרת ראשית של העמוד -->
+            <Label Text="הדגמת שימוש ב-Styles ב-.NET MAUI"
+                   Style="{StaticResource PageHeaderLabel}" />
+
+            <Label Text="בעמוד זה נלמד על סגנונות מרומזים (Implicit), סגנונות מפורשים (Explicit), ירושת סגנונות (BasedOn), ושימוש ב-DynamicResource מול StaticResource."
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,10" />
+
+            <!-- ============================================== -->
+            <!-- חלק 1: סגנון מרומז (Implicit Style)           -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="1. סגנון מרומז (Implicit Style)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+                    
+                    <Label Text="הטקסט הנוכחי מעוצב לפי Implicit Style שהוגדר ב-CustomStyles.xaml עבור TargetType=&quot;Label&quot; ללא x:Key." />
+                    <Label Text="כל פקד Label בעמוד מקבל סגנון זה אוטומטית, אלא אם מוגדר לו סגנון מפורש אחר."
+                           TextColor="#6B7280" />
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- הגדרה ב-ResourceDictionary ללא x:Key --&gt;&#x0a;&lt;Style TargetType=&quot;Label&quot;&gt;&#x0a;    &lt;Setter Property=&quot;TextColor&quot; Value=&quot;#212121&quot; /&gt;&#x0a;    &lt;Setter Property=&quot;FontSize&quot; Value=&quot;15&quot; /&gt;&#x0a;&lt;/Style&gt;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 2: סגנונות מפורשים וירושה (BasedOn)       -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="2. סגנונות מפורשים וירושה (Style Inheritance)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="כפתור ראשי (PrimaryButton) עם סגנון בסיס:" />
+                    <Button Text="כפתור ראשי (PrimaryButton)"
+                            Style="{StaticResource PrimaryButton}" />
+
+                    <Label Text="כפתורי ירושה (SuccessButton ו-DangerButton) המשתמשים ב-BasedOn ומשנים רק צבע רקע:" />
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="אישור (Success)"
+                                Style="{StaticResource SuccessButton}" />
+
+                        <Button Grid.Column="1"
+                                Text="מחיקה (Danger)"
+                                Style="{StaticResource DangerButton}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- ירושת סגנון באמצעות BasedOn --&gt;&#x0a;&lt;Style x:Key=&quot;SuccessButton&quot; TargetType=&quot;Button&quot;&#x0a;       BasedOn=&quot;{StaticResource PrimaryButton}&quot;&gt;&#x0a;    &lt;Setter Property=&quot;BackgroundColor&quot; Value=&quot;#2E7D32&quot; /&gt;&#x0a;&lt;/Style&gt;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 3: DynamicResource מול StaticResource     -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="3. משאבים דינמיים (DynamicResource)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="בניגוד ל-StaticResource הנקרא פעם אחת בלבד בעת טעינת הדף, DynamicResource עוקב אחרי שינויים במילון המשאבים ומעדכן את הממשק מיד בזמן ריצה!" />
+
+                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Label Text="ערכת צבעים פעילה: " FontAttributes="Bold" VerticalOptions="Center" />
+                        <Label Text="{Binding CurrentAccentName}" TextColor="{DynamicResource DynamicAccentColor}" FontAttributes="Bold" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="בחרו צבע כדי לבדוק החלפה דינמית חיה:" FontAttributes="Bold" Margin="0,5,0,0" />
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="6">
+                        <Button Grid.Column="0" Text="סגול" BackgroundColor="#512BD4"
+                                Command="{Binding SwitchAccentColorCommand}" CommandParameter="Purple" HeightRequest="40" />
+                        <Button Grid.Column="1" Text="טורקיז" BackgroundColor="#00897B"
+                                Command="{Binding SwitchAccentColorCommand}" CommandParameter="Teal" HeightRequest="40" />
+                        <Button Grid.Column="2" Text="כתום" BackgroundColor="#FB8C00"
+                                Command="{Binding SwitchAccentColorCommand}" CommandParameter="Orange" HeightRequest="40" />
+                        <Button Grid.Column="3" Text="נייבי" BackgroundColor="#1E3A8A"
+                                Command="{Binding SwitchAccentColorCommand}" CommandParameter="Navy" HeightRequest="40" />
+                    </Grid>
+
+                    <Button Text="כפתור עם מסגרת (SecondaryButton - מגיב לצבע הדינמי!)"
+                            Style="{StaticResource SecondaryButton}"
+                            Margin="0,8,0,0" />
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- שימוש ב-DynamicResource לקליטת צבע משתנה --&gt;&#x0a;&lt;Setter Property=&quot;TextColor&quot; Value=&quot;{DynamicResource DynamicAccentColor}&quot; /&gt;&#x0a;&lt;!-- בקוד C#: Application.Current.Resources[&quot;DynamicAccentColor&quot;] = newColor; --&gt;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 4: VisualStateManager בתוך Style           -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="4. VisualStateManager בתוך Style"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="ה-VisualStateManager מגדיר כיצד הפקד נראה במצבים שונים: Normal, Disabled, Pressed." />
+
+                    <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                        <Label Text="מצב פעיל (Enabled):" VerticalOptions="Center" FontAttributes="Bold" />
+                        <Switch IsToggled="{Binding IsActionEnabled}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="{Binding StatusMessage}" TextColor="#4B5563" />
+
+                    <Button Text="כפתור אינטראקטיבי (InteractiveButtonStyle)"
+                            Style="{StaticResource InteractiveButtonStyle}"
+                            Command="{Binding TestClickCommand}" />
+
+                    <Label Text="{Binding ClickCount, StringFormat='מספר לחיצות על הכפתור: {0}'}"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold" />
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;VisualStateGroup x:Name=&quot;CommonStates&quot;&gt;&#x0a;    &lt;VisualState x:Name=&quot;Normal&quot; /&gt;&#x0a;    &lt;VisualState x:Name=&quot;Disabled&quot;&gt;&#x0a;        &lt;Setter Property=&quot;BackgroundColor&quot; Value=&quot;#9E9E9E&quot; /&gt;&#x0a;    &lt;/VisualState&gt;&#x0a;&lt;/VisualStateGroup&gt;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

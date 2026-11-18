@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:LearnStylesMaui"
+             xmlns:converters="clr-namespace:LearnStylesMaui.Converters"
+             x:Class="LearnStylesMaui.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/CustomStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- ממירי ערכים ברמה אפליקטיבית (זמינים בכל דפי האפליקציה) -->
+            <converters:InverseBoolConverter x:Key="AppInverseBoolConverter" />
+            <converters:BoolToColorConverter x:Key="AppBoolToColorConverter" TrueColor="#2E7D32" FalseColor="#D32F2F" />
+            <converters:ScoreToGradeConverter x:Key="AppScoreToGradeConverter" />
+            <converters:TemperatureTwoWayConverter x:Key="AppTemperatureConverter" />
+            <converters:NullOrEmptyToBoolConverter x:Key="AppNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

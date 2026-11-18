@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="LearnStylesMaui.Resources.Styles.CustomStyles">
+
+    <!-- ======================================================== -->
+    <!-- 1. משאב צבע דינמי (Dynamic Color) לבדיקת DynamicResource -->
+    <!-- ======================================================== -->
+    <Color x:Key="DynamicAccentColor">#512BD4</Color>
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="CardBorderColor">#E0E0E0</Color>
+
+    <!-- ======================================================== -->
+    <!-- 2. סגנון מרומז (Implicit Style)                         -->
+    <!-- ללא x:Key! כל ה-Labels יקבלו סגנון זה כברירת מחדל          -->
+    <!-- ======================================================== -->
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="#212121" />
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+
+    <!-- ======================================================== -->
+    <!-- 3. סגנונות מפורשים (Explicit Styles עם x:Key)             -->
+    <!-- ======================================================== -->
+    
+    <!-- כותרת ראשית של עמוד -->
+    <Style x:Key="PageHeaderLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{DynamicResource DynamicAccentColor}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,10,0,5" />
+    </Style>
+
+    <!-- כותרת של סעיף/חלק -->
+    <Style x:Key="SectionHeaderLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="#374151" />
+        <Setter Property="Margin" Value="0,10,0,5" />
+    </Style>
+
+    <!-- סגנון עבור כרטיס מידע (Card) -->
+    <Style x:Key="CardBorder" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="Stroke" Value="{StaticResource CardBorderColor}" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="0,6,0,10" />
+        <Setter Property="Shadow">
+            <Shadow Brush="#10000000" Offset="0,4" Radius="8" Opacity="0.8" />
+        </Setter>
+    </Style>
+
+    <!-- כפתור ראשי (Primary Button) -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource DynamicAccentColor}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="Padding" Value="16,0" />
+    </Style>
+
+    <!-- כפתור משני עם מסגרת (Secondary / Outlined Button) -->
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource DynamicAccentColor}" />
+        <Setter Property="BorderColor" Value="{DynamicResource DynamicAccentColor}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="HeightRequest" Value="48" />
+    </Style>
+
+    <!-- ======================================================== -->
+    <!-- 4. ירושת סגנון (Style Inheritance בעזרת BasedOn)          -->
+    <!-- יורש מ-PrimaryButton ורק משנה צבע רקע!                  -->
+    <!-- ======================================================== -->
+    <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="BackgroundColor" Value="#2E7D32" />
+    </Style>
+
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="BackgroundColor" Value="#D32F2F" />
+    </Style>
+
+    <!-- סגנון עבור תרגיל התלמיד (Warning Button המבוסס על PrimaryButton) -->
+    <Style x:Key="WarningButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="BackgroundColor" Value="#F57C00" />
+    </Style>
+
+    <!-- ======================================================== -->
+    <!-- 5. סגנון עם VisualStateManager (שינוי מצב מושבת/פעיל)    -->
+    <!-- ======================================================== -->
+    <Style x:Key="InteractiveButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="1.0" />
+                            <Setter Property="Scale" Value="1.0" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="#9E9E9E" />
+                            <Setter Property="TextColor" Value="#E0E0E0" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Scale" Value="0.95" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- סגנון לתיבת קוד לימודית (Code Snippet Box) -->
+    <Style x:Key="CodeBoxBorder" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+        <Setter Property="Stroke" Value="#334155" />
+        <Setter Property="BackgroundColor" Value="#1E293B" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="Margin" Value="0,4,0,8" />
+    </Style>
+
+    <Style x:Key="CodeLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="Consolas, Courier New, monospace" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="#38BDF8" />
+    </Style>
+
+</ResourceDictionary>

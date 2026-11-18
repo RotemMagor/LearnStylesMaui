@@ -1,0 +1,88 @@
+classDiagram
+  direction TB
+  class AppShell {
+  }
+  class BoolToColorConverter {
+    +Color TrueColor
+    +Color FalseColor
+    +Convert() object?
+    +ConvertBack() object?
+  }
+  class InverseBoolConverter {
+    +Convert() object?
+    +ConvertBack() object?
+  }
+  class NullOrEmptyToBoolConverter {
+    +Convert() object?
+    +ConvertBack() object?
+  }
+  class ScoreToGradeConverter {
+    +Convert() object?
+    +ConvertBack() object?
+  }
+  class TemperatureTwoWayConverter {
+    +Convert() object?
+    +ConvertBack() object?
+  }
+  class PracticeExerciseItem {
+    +int Id
+    +string Title
+    +string Description
+    +int DifficultyStars
+    +bool IsCompleted
+    +double Score
+  }
+  class StudentItem {
+    +int Id
+    +string FullName
+    +int FinalGrade
+    +bool IsPresent
+    +bool HasMissingAssignments
+    +string SpecialNote
+    +string AvatarUrl
+  }
+  class CustomStyles {
+  }
+  class BaseViewModel {
+  }
+  class ConvertersDemoViewModel {
+    +ICommand ToggleActiveCommand
+    +ICommand SetScoreCommand
+    +ICommand ClearNoteCommand
+  }
+  class StudentExerciseViewModel {
+    +ObservableCollection~PracticeExerciseItem~ Tasks
+    +ICommand ToggleTaskCommand
+    +ICommand ResetExerciseCommand
+  }
+  class StudentsDashboardViewModel {
+    +ObservableCollection~StudentItem~ Students
+    +ICommand TogglePresenceCommand
+    +ICommand AddSampleStudentCommand
+  }
+  class StylesDemoViewModel {
+    +ICommand ToggleEnabledCommand
+    +ICommand TestClickCommand
+    +ICommand SwitchAccentColorCommand
+  }
+  class ConvertersDemoPage {
+  }
+  class StudentExercisePage {
+  }
+  class StudentsDashboardPage {
+  }
+  class StylesDemoPage {
+  }
+  INotifyPropertyChanged <|-- BaseViewModel
+  BaseViewModel <|-- ConvertersDemoViewModel
+  BaseViewModel <|-- StudentExerciseViewModel
+  BaseViewModel <|-- StudentsDashboardViewModel
+  BaseViewModel <|-- StylesDemoViewModel
+  ContentPage <|-- ConvertersDemoPage
+  ConvertersDemoPage ..> ConvertersDemoViewModel : DI
+  ContentPage <|-- StudentExercisePage
+  StudentExercisePage ..> StudentExerciseViewModel : DI
+  ContentPage <|-- StudentsDashboardPage
+  StudentsDashboardPage ..> StudentsDashboardViewModel : DI
+  ContentPage <|-- StylesDemoPage
+  StylesDemoPage ..> StylesDemoViewModel : DI

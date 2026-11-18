@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="LearnStylesMaui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:LearnStylesMaui.Views"
+    Title="LearnStylesMaui"
+    FlowDirection="RightToLeft">
+
+    <TabBar>
+        <Tab Title="סגנונות (Styles)" Route="StylesDemoPage">
+            <ShellContent ContentTemplate="{DataTemplate views:StylesDemoPage}" />
+        </Tab>
+
+        <Tab Title="ממירים (Converters)" Route="ConvertersDemoPage">
+            <ShellContent ContentTemplate="{DataTemplate views:ConvertersDemoPage}" />
+        </Tab>
+
+        <Tab Title="כרטיסי תלמידים" Route="StudentsDashboardPage">
+            <ShellContent ContentTemplate="{DataTemplate views:StudentsDashboardPage}" />
+        </Tab>
+
+        <Tab Title="משימת תרגול" Route="StudentExercisePage">
+            <ShellContent ContentTemplate="{DataTemplate views:StudentExercisePage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

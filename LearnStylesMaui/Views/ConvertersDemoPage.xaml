@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LearnStylesMaui.ViewModels"
+             xmlns:converters="clr-namespace:LearnStylesMaui.Converters"
+             x:Class="LearnStylesMaui.Views.ConvertersDemoPage"
+             x:DataType="vm:ConvertersDemoViewModel"
+             Title="ממירי ערכים (Converters)"
+             FlowDirection="RightToLeft">
+
+    <!-- ממירי ערכים מקומיים ברמת העמוד לצורך המחשה לימודית -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="LocalStatusColorConverter"
+                                             TrueColor="#0D9488"
+                                             FalseColor="#E11D48" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Label Text="הדגמת שימוש ב-Value Converters ב-.NET MAUI"
+                   Style="{StaticResource PageHeaderLabel}" />
+
+            <Label Text="ממיר ערכים (IValueConverter) מאפשר להמיר מידע מה-ViewModel לתצוגה ויזואלית מתאימה בממשק (UI) ולהפך."
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,10" />
+
+            <!-- ============================================== -->
+            <!-- חלק 1: InverseBoolConverter                    -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="1. ממיר בוליאני הפוך (InverseBoolConverter)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="מצב פעיל (IsActive):" VerticalOptions="Center" FontAttributes="Bold" />
+                        <Switch IsToggled="{Binding IsItemActive}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- מוצג רק כאשר IsActive הוא true -->
+                    <Border BackgroundColor="#E8F5E9" Stroke="#81C784" StrokeShape="RoundRectangle 8" Padding="10"
+                            IsVisible="{Binding IsItemActive}">
+                        <Label Text="✅ הפריט פעיל כעת! (IsVisible = {Binding IsActive})" TextColor="#2E7D32" FontAttributes="Bold" />
+                    </Border>
+
+                    <!-- מוצג רק כאשר IsActive הוא false באמצעות הממיר ההפוך -->
+                    <Border BackgroundColor="#FFEBEE" Stroke="#E57373" StrokeShape="RoundRectangle 8" Padding="10"
+                            IsVisible="{Binding IsItemActive, Converter={StaticResource AppInverseBoolConverter}}">
+                        <Label Text="❌ הפריט מושבת כעת! (IsVisible = {Binding IsActive, Converter={StaticResource AppInverseBoolConverter}})"
+                               TextColor="#C62828" FontAttributes="Bold" />
+                    </Border>
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- הסתרת פקד כשהערך הוא true ללא צורך במאפיין נוסף ב-ViewModel --&gt;&#x0a;IsVisible=&quot;{Binding IsActive, Converter={StaticResource AppInverseBoolConverter}}&quot;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 2: BoolToColorConverter                    -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="2. ממיר בוליאן לצבע (BoolToColorConverter)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="הממיר מקבל משתנה בוליאני ומחזיר צבע שהוגדר מראש ב-XAML כמאפייני TrueColor / FalseColor." />
+
+                    <Border StrokeShape="RoundRectangle 8" Padding="12"
+                            BackgroundColor="{Binding IsItemActive, Converter={StaticResource LocalStatusColorConverter}}">
+                        <Label Text="כרטיס זה מחליף צבע רקע אוטומטית לפי ה-Switch למעלה!"
+                               TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                    </Border>
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- הגדרה במשאבי הדף עם צבעים מותאמים אישית --&gt;&#x0a;&lt;converters:BoolToColorConverter x:Key=&quot;LocalStatusColorConverter&quot;&#x0a;    TrueColor=&quot;#0D9488&quot; FalseColor=&quot;#E11D48&quot; /&gt;&#x0a;&lt;!-- שימוש ב-Binding --&gt;&#x0a;BackgroundColor=&quot;{Binding IsItemActive, Converter={StaticResource LocalStatusColorConverter}}&quot;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 3: ScoreToGradeConverter עם Parameter       -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="3. המרת ציון עם ConverterParameter"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="באמצעות ConverterParameter, אותו ממיר עצמו יכול להחזיר טקסט הערכה מילולי או צבע תואם!" />
+
+                    <Label Text="{Binding CurrentScore, StringFormat='ציון התלמיד לבדיקה: {0}'}"
+                           FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+
+                    <Slider Minimum="0" Maximum="100" Value="{Binding CurrentScore}" />
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <!-- המרת ציון לטקסט מילולי -->
+                        <Border Grid.Column="0" BackgroundColor="#F3F4F6" Stroke="#D1D5DB" StrokeShape="RoundRectangle 8" Padding="12">
+                            <VerticalStackLayout>
+                                <Label Text="הערכה מילולית:" FontSize="13" TextColor="#6B7280" />
+                                <Label Text="{Binding CurrentScore, Converter={StaticResource AppScoreToGradeConverter}}"
+                                       FontSize="16" FontAttributes="Bold" Margin="0,4,0,0" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- המרת ציון לצבע רקע באמצעות ConverterParameter="Color" -->
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Padding="12"
+                                BackgroundColor="{Binding CurrentScore, Converter={StaticResource AppScoreToGradeConverter}, ConverterParameter='Color'}">
+                            <VerticalStackLayout>
+                                <Label Text="תגית צבע חכמה:" FontSize="13" TextColor="White" />
+                                <Label Text="דירוג הישג" TextColor="White" FontAttributes="Bold" Margin="0,4,0,0" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- העברת פרמטר לממיר באמצעות ConverterParameter --&gt;&#x0a;BackgroundColor=&quot;{Binding CurrentScore,&#x0a;    Converter={StaticResource AppScoreToGradeConverter},&#x0a;    ConverterParameter='Color'}&quot;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 4: Two-Way Converter (הדגמת ConvertBack)   -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="4. ממיר דו-כיווני (Two-Way Converter ו-ConvertBack)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="ה-ViewModel שומר את הטמפרטורה בצלזיוס (°C). המשתמש מקליד בתיבה בפרנהייט (°F). הממיר ממיר צלזיוס->פרנהייט ב-Convert, וממיר פרנהייט->צלזיוס ב-ConvertBack!" />
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="צלזיוס ב-ViewModel (°C):" FontSize="13" FontAttributes="Bold" />
+                            <Label Text="{Binding CelsiusTemperature, StringFormat='{0} °C'}"
+                                   FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource DynamicAccentColor}" />
+                            <Slider Minimum="-10" Maximum="50" Value="{Binding CelsiusTemperature}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="פרנהייט ב-UI (°F):" FontSize="13" FontAttributes="Bold" />
+                            <!-- Binding עם מצב TwoWay ושימוש בממיר הדו-כיווני -->
+                            <Entry Text="{Binding CelsiusTemperature, Mode=TwoWay, Converter={StaticResource AppTemperatureConverter}}"
+                                   Keyboard="Numeric"
+                                   BackgroundColor="#F3F4F6"
+                                   HeightRequest="45" />
+                            <Label Text="(נסו לערוך את המספר בתיבה!)" FontSize="11" TextColor="#6B7280" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Border Style="{StaticResource CodeBoxBorder}">
+                        <Label Style="{StaticResource CodeLabel}"
+                               Text="&lt;!-- TwoWay Binding משתמש גם ב-Convert וגם ב-ConvertBack --&gt;&#x0a;&lt;Entry Text=&quot;{Binding CelsiusTemperature, Mode=TwoWay,&#x0a;    Converter={StaticResource AppTemperatureConverter}}&quot; /&gt;" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ============================================== -->
+            <!-- חלק 5: NullOrEmptyToBoolConverter              -->
+            <!-- ============================================== -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="5. בדיקת מחרוזת ריקה (NullOrEmptyToBoolConverter)"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="הקלידו הערה על התלמיד כדי לראות אינדיקציות ולידציה אוטומטיות:" />
+
+                    <Entry Text="{Binding StudentNoteInput}"
+                           Placeholder="הקלידו כאן הערה..."
+                           BackgroundColor="#F9FAFB" />
+
+                    <!-- אזהרה שמופיעה רק כאשר המחרוזת ריקה -->
+                    <Border BackgroundColor="#FEF3C7" Stroke="#F59E0B" StrokeShape="RoundRectangle 6" Padding="8"
+                            IsVisible="{Binding StudentNoteInput, Converter={StaticResource AppNullOrEmptyConverter}}">
+                        <Label Text="⚠️ שימו לב: תיבת ההערה ריקה כרגע!" TextColor="#B45309" FontSize="13" FontAttributes="Bold" />
+                    </Border>
+
+                    <Button Text="נקה תיבת הערה לבדיקה"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding ClearNoteCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LearnStylesMaui.ViewModels"
+             xmlns:models="clr-namespace:LearnStylesMaui.Models"
+             x:Class="LearnStylesMaui.Views.StudentExercisePage"
+             x:DataType="vm:StudentExerciseViewModel"
+             Title="משימת תרגול לתלמידים"
+             FlowDirection="RightToLeft">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- כותרת ראשית והנחיות לתלמיד -->
+            <Label Text="משימת תרגול: סגנונות וממירים משלכם"
+                   Style="{StaticResource PageHeaderLabel}" />
+
+            <Border BackgroundColor="#EFF6FF" Stroke="#3B82F6" StrokeShape="RoundRectangle 10" Padding="14">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🎯 מטרת המשימה:" FontAttributes="Bold" TextColor="#1D4ED8" FontSize="16" />
+                    <Label Text="1. צרו ממיר ערכים חדש בשם StarsConverter הממיר דירוג 1-5 למחרוזת כוכבים ויזואלית." TextColor="#1E3A8A" />
+                    <Label Text="2. צרו ב-CustomStyles.xaml סגנון כרטיס תלמיד מותאם אישית (StudentCustomCard)." TextColor="#1E3A8A" />
+                    <Label Text="3. השתמשו בירושת סגנון (BasedOn) לייצור כפתור אזהרה כתום." TextColor="#1E3A8A" />
+                    <Label Text="4. קשרו את הממיר והסגנון ל-XAML באזור הבדיקה למטה!" TextColor="#1E3A8A" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- רשימת משימות אינטראקטיבית לסימון ביצוע -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="רשימת משימות לביצוע (לחצו לסימון שהשלמתם):"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="{Binding SubmissionFeedback}"
+                           TextColor="{DynamicResource DynamicAccentColor}" FontAttributes="Bold" />
+
+                    <CollectionView ItemsSource="{Binding Tasks}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:PracticeExerciseItem">
+                                <Border Margin="0,4" Padding="10" StrokeShape="RoundRectangle 8" BackgroundColor="#F9FAFB" Stroke="#E5E7EB">
+                                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                                        <!-- תיבת סימון / כפתור סימון משימה שהושלמה -->
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}" VerticalOptions="Center" />
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="15" />
+                                            <Label Text="{Binding Description}" FontSize="12" TextColor="#6B7280" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- אזור בדיקה אינטראקטיבי עבור התלמידים (Interactive Playground) -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="אזור בדיקה חי (Playground לתלמידים):"
+                           Style="{StaticResource SectionHeaderLabel}" />
+
+                    <Label Text="התאימו את הערכים כאן כדי לבדוק שהסגנון והממיר שכתבתם פועלים כהלכה:" TextColor="#4B5563" />
+
+                    <!-- שם תלמיד -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="שם התלמיד:" FontAttributes="Bold" FontSize="13" />
+                        <Entry Text="{Binding StudentName}" BackgroundColor="#F3F4F6" />
+                    </VerticalStackLayout>
+
+                    <!-- סליידר ציון -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding TestScore, StringFormat='ציון לבדיקה: {0}'}" FontAttributes="Bold" FontSize="13" />
+                        <Slider Minimum="0" Maximum="100" Value="{Binding TestScore}" />
+                    </VerticalStackLayout>
+
+                    <!-- דירוג כוכבים לבדיקת ממיר הכוכבים של התלמיד -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding DifficultyStars, StringFormat='רמת קושי / כוכבים לבדיקה: {0} מתוך 5'}" FontAttributes="Bold" FontSize="13" />
+                        <Stepper Minimum="1" Maximum="5" Increment="1" Value="{Binding DifficultyStars}" HorizontalOptions="Start" />
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="זכאי לבונוס:" FontAttributes="Bold" VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding IsBonusEligible}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- כרטיס תצוגה שבו התלמיד מחבר את הסגנונות והממירים שיצר -->
+                    <Label Text="הכרטיס שלכם לבדיקה:" FontAttributes="Bold" Margin="0,10,0,0" />
+
+                    <!-- ============================================================== -->
+                    <!-- TODO לתלמיד: החלף את Style="{StaticResource CardBorder}"      -->
+                    <!-- בסגנון המותאם שיצרת: Style="{StaticResource StudentCustomCard}" -->
+                    <!-- ============================================================== -->
+                    <Border Style="{StaticResource CardBorder}" BackgroundColor="#FAFAFA">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="{Binding StudentName}" FontSize="18" FontAttributes="Bold" />
+
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="ציון מחושב:" FontAttributes="Bold" />
+                                <Label Text="{Binding TestScore, Converter={StaticResource AppScoreToGradeConverter}}"
+                                       TextColor="{Binding TestScore, Converter={StaticResource AppScoreToGradeConverter}, ConverterParameter='Color'}"
+                                       FontAttributes="Bold" />
+                            </HorizontalStackLayout>
+
+                            <!-- ============================================================== -->
+                            <!-- TODO לתלמיד: לאחר יצירת StarsConverter, קשרו אותו לכאן:     -->
+                            <!-- Text="{Binding DifficultyStars, Converter={StaticResource StarsConverter}}" -->
+                            <!-- ============================================================== -->
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="כוכבי דירוג:" FontAttributes="Bold" />
+                                <Label Text="{Binding DifficultyStars, StringFormat='כוכבים (ערך גולמי): {0} ★'}"
+                                       FontSize="15" TextColor="#D97706" />
+                            </HorizontalStackLayout>
+
+                            <!-- הדגמת כפתור אזהרה עם ירושה (WarningButton) -->
+                            <Button Text="כפתור אזהרה מבוסס BasedOn"
+                                    Style="{StaticResource WarningButton}"
+                                    Command="{Binding ResetExerciseCommand}"
+                                    Margin="0,8,0,0" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

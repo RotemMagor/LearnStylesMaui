@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LearnStylesMaui.ViewModels"
+             xmlns:models="clr-namespace:LearnStylesMaui.Models"
+             x:Class="LearnStylesMaui.Views.StudentsDashboardPage"
+             x:DataType="vm:StudentsDashboardViewModel"
+             Title="לוח תלמידים משולב"
+             FlowDirection="RightToLeft">
+
+    <Grid RowDefinitions="Auto, *" Padding="20" RowSpacing="12">
+
+        <!-- כותרת עליונה וכפתור הוספה -->
+        <VerticalStackLayout Grid.Row="0" Spacing="8">
+            <Label Text="לוח בקרה: שילוב מעשי של Styles ו-Converters"
+                   Style="{StaticResource PageHeaderLabel}" />
+
+            <Label Text="בדף זה כל כרטיס תלמיד מעוצב בעזרת Styles, והמידע (נוכחות, ציון מילולי, צבע דירוג והערות) מחושב אוטומטית בעזרת Converters."
+                   HorizontalTextAlignment="Center"
+                   TextColor="#4B5563" />
+
+            <Button Text="+ הוסף תלמיד לדוגמה"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding AddSampleStudentCommand}"
+                    Margin="0,6,0,0" />
+        </VerticalStackLayout>
+
+        <!-- רשימת כרטיסי תלמידים -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Students}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:StudentItem">
+                    <Border Style="{StaticResource CardBorder}">
+                        <Grid RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="*, Auto" RowSpacing="8">
+
+                            <!-- שם התלמיד ותגית נוכחות -->
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding FullName}"
+                                   FontSize="18" FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+
+                            <!-- תגית נוכחות המשתמשת ב-BoolToColorConverter -->
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="10,4"
+                                    BackgroundColor="{Binding IsPresent, Converter={StaticResource AppBoolToColorConverter}}">
+                                <Label Text="{Binding IsPresent, Converter={StaticResource AppBoolToColorConverter}, ConverterParameter='Text'}"
+                                       TextColor="White" FontSize="12" FontAttributes="Bold">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsPresent}" Value="True">
+                                            <Setter Property="Text" Value="נוכח בכיתה" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsPresent}" Value="False">
+                                            <Setter Property="Text" Value="נעדר" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Border>
+
+                            <!-- ציון מספרי והערכה מילולית עם ScoreToGradeConverter -->
+                            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="10" VerticalOptions="Center">
+                                <Label Text="{Binding FinalGrade, StringFormat='ציון: {0}'}"
+                                       FontAttributes="Bold" FontSize="15" VerticalOptions="Center" />
+
+                                <!-- הערכה מילולית וצבע מותאם אישית מה-Converter -->
+                                <Border StrokeShape="RoundRectangle 6" Padding="8,2"
+                                        BackgroundColor="{Binding FinalGrade, Converter={StaticResource AppScoreToGradeConverter}, ConverterParameter='Color'}">
+                                    <Label Text="{Binding FinalGrade, Converter={StaticResource AppScoreToGradeConverter}}"
+                                           TextColor="White" FontSize="12" FontAttributes="Bold" />
+                                </Border>
+                            </HorizontalStackLayout>
+
+                            <!-- הערה מיוחדת ואזהרת מטלות חסרות -->
+                            <VerticalStackLayout Grid.Row="2" Grid.ColumnSpan="2" Spacing="4">
+                                <!-- מוצג רק אם קיימת הערה באמצעות NullOrEmptyToBoolConverter עם פרמטר Inverse -->
+                                <Label Text="{Binding SpecialNote, StringFormat='💬 הערה: {0}'}"
+                                       FontSize="13" TextColor="#4B5563"
+                                       IsVisible="{Binding SpecialNote, Converter={StaticResource AppNullOrEmptyConverter}, ConverterParameter='Inverse'}" />
+
+                                <!-- אזהרה על מטלות חסרות -->
+                                <Label Text="⚠️ קיימות מטלות שטרם הוגשו!"
+                                       TextColor="#D97706" FontSize="12" FontAttributes="Bold"
+                                       IsVisible="{Binding HasMissingAssignments}" />
+                            </VerticalStackLayout>
+
+                            <!-- כפתור פעולה לשינוי מצב נוכחות -->
+                            <Button Grid.Row="3" Grid.ColumnSpan="2"
+                                    Text="שנה מצב נוכחות (נוכח / נעדר)"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:StudentsDashboardViewModel}}, Path=TogglePresenceCommand}"
+                                    CommandParameter="{Binding .}"
+                                    HeightRequest="40" Margin="0,4,0,0" />
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>
