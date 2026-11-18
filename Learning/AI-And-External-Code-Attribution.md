@@ -13,7 +13,7 @@
 
 | # | קובץ ומחלקה (`File & Class`) | פעולה / רכיב (`Method / Component`) | מקור (`Agent Scaffold` / `AI Tool` / `External URL`) | מה סופק ע"י ה-AI / המקור החיצוני? | מה התלמיד כתב, שינה או התאים לפרויקט? | נקודות מפתח להסבר בבחינה בעל-פה |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | `MauiProgram.cs` | `CreateMauiApp` | `Agent Scaffold` | תבנית בסיסית לרישום פונטים ושירותים ב-DI | התלמיד הוסיף וחיבר את רישום ה-ViewModels, ה-Pages וה-Services של האפליקציה | הסבר ההבדל בין `AddSingleton` ל-`AddTransient` ומדוע `DatabaseService` נרשם כ-Singleton |
+| 1 | `MauiProgram.cs` | `CreateMauiApp`, `RegisterFonts`, `RegisterServices`, `RegisterViewModels`, `RegisterViews`, `RegisterDevTools` | `Agent Scaffold` | ארגון רישום ה-DI Container בתבנית Fluent Extension Methods לפי שכבות (Fonts, Services, ViewModels, Views, DevTools) כולל תיעוד XML מלא | התלמיד מוסיף ומרחיב את רישום ה-ViewModels, ה-Pages וה-Services של האפליקציה במתודה המתאימה | הסבר כיצד פועלות Extension Methods (`this MauiAppBuilder builder`), שרשור Fluent, וההבדל בין `AddSingleton` ל-`AddTransient` |
 | 2 | `Converters/*` | `IValueConverter` implementations | `Agent Scaffold` | שלד ממירי ערכים (InverseBool, BoolToColor, ScoreToGrade, TemperatureTwoWay, NullOrEmpty) | התלמידים חוקרים את השימוש ב-Convert ו-ConvertBack ומשתמשים בהם כבסיס למימוש StarsConverter במשימת התרגול | הסבר מדוע המרה שייכת ל-Converter ולא ל-ViewModel (עקרון MVVM נקי), וכיצד פועל TwoWay Binding ב-TemperatureConverter |
 | 3 | `CustomStyles.xaml` | Styles Dictionary | `Agent Scaffold` | הגדרת סגנונות מרומזים, מפורשים, ירושת BasedOn ו-VisualStateManager | התלמידים מוסיפים סגנון כרטיס אישי וירושת כפתור אזהרה במסגרת המשימה | הסבר ההבדל בין סגנון מרומז למפורש וכיצד BasedOn מיישם את עקרון DRY |
 

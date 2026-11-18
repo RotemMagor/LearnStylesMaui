@@ -72,4 +72,53 @@ Always write explanations and lessons in this learning book in **Hebrew** while 
 
 ![תרשים מחלקות (UML Class Diagram)](Images/Architecture-UML.png)
 
+---
+
+## פרק 3: ארגון ה-DI Container בתבנית Fluent Extension Methods ב-`MauiProgram.cs`
+
+### 📌 מה השתנה בפרויקט?
+מחלקת האתחול `MauiProgram` בקובץ `LearnStylesMaui/MauiProgram.cs` עברה ארגון מחדש (Refactoring) מתודת `CreateMauiApp` ארוכה לתבנית **Fluent Interface** נקייה ומודולרית באמצעות מתודות הרחבה (`Extension Methods`) על `MauiAppBuilder`:
+- `RegisterFonts(this MauiAppBuilder builder)`: רישום הגופנים של האפליקציה (`OpenSansRegular`, `OpenSansSemibold`).
+- `RegisterServices(this MauiAppBuilder builder)`: נקודת הרחבה ייעודית לרישום שירותי תשתית ונתונים (כגון מסד נתונים או API).
+- `RegisterViewModels(this MauiAppBuilder builder)`: רישום מרוכז של כל מחלקות ה-ViewModels (`StylesDemoViewModel`, `ConvertersDemoViewModel`, `StudentsDashboardViewModel`, `StudentExerciseViewModel`) באמצעות `builder.Services.AddTransient<T>()`.
+- `RegisterViews(this MauiAppBuilder builder)`: רישום מרוכז של כל המסכים והדפים (`StylesDemoPage`, `ConvertersDemoPage`, `StudentsDashboardPage`, `StudentExercisePage`) ב-DI Container.
+- `RegisterDevTools(this MauiAppBuilder builder)`: רישום כלי ניפוי שגיאות (`builder.Logging.AddDebug()`) וסוכן הבדיקות `builder.AddMauiDevFlowAgent()` תחת תנאי הקומפילציה `#if DEBUG`.
+
+```csharp
+public static MauiApp CreateMauiApp()
+{
+    var builder = MauiApp.CreateBuilder();
+    builder
+        .UseMauiApp<App>()
+        .RegisterFonts()
+        .RegisterServices()
+        .RegisterViewModels()
+        .RegisterViews()
+        .RegisterDevTools();
+
+    return builder.Build();
+}
+```
+
+### 💡 מדוע זה השתנה?
+כאשר אפליקציית .NET MAUI גדלה ונוספים לה מסכים, ViewModels ושירותים רבים, מתודת `CreateMauiApp()` הופכת עמוסה וקשה לקריאה. חלוקת הרישום ב-DI Container למתודות Fluent נפרדות לפי שכבות הארכיטקטורה (Views, ViewModels, Services) מיישמת את **עקרון האחריות היחידה (Single Responsibility Principle)**, משפרת את הקריאות, ומקלה על תלמיד להציג ולהסביר לבוחן הבגרות היכן נרשמת כל שכבה.
+
+### 🧠 מושגי יסוד שנלמדו:
+1. **Extension Methods (`this MauiAppBuilder builder`)**: מתודות סטטיות במחלקה סטטית המאפשרות להוסיף פעולות חדשות לטיפוס קיים (`MauiAppBuilder`) מבלי לשנות את קוד המקור שלו.
+2. **Fluent Interface & Method Chaining**: כל מתודת רישום מחזירה את אותו אובייקט `MauiAppBuilder` (`return builder;`), וכך ניתן לשרשר את הקריאות זו אחר זו בצורה קריאה וזורמת.
+3. **Dependency Injection Lifetimes (`AddTransient` מול `AddSingleton`)**:
+   - `AddTransient<T>()`: יוצר מופע חדש בכל פעם שהמערכת מבקשת את המחלקה (מתאים לדפים ול-ViewModels שצריכים מצב נקי בכל ניווט).
+   - `AddSingleton<T>()`: יוצר מופע יחיד לאורך כל חיי האפליקציה (מתאים לשירותי מסד נתונים או שירותי מצב גלובליים).
+
+### 📚 מקורות לימוד רשמיים:
+- [Microsoft Learn: Dependency injection in .NET MAUI](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/dependency-injection?view=net-maui-10.0)
+- [Microsoft Learn: Extension Methods (C# Programming Guide)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods)
+
+### ❓ שאלות הבנה לבדיקה עצמית:
+1. מדוע כל מתודה כמו `RegisterViewModels` מקבלת פרמטר עם המילה השמורה `this` (`this MauiAppBuilder builder`) ומחזירה `MauiAppBuilder`?  
+   * **תשובה**: המילה `this` הופכת את המתודה ל-Extension Method כך שניתן לקרוא לה ישירות על האובייקט `builder.`, והחזרת `MauiAppBuilder` מאפשרת להמשיך לשרשר (Method Chaining) את הפעולה הבאה כגון `.RegisterViews()`.
+2. מה יקרה אם נוסיף דף חדש שמקבל את ה-ViewModel שלו בבנאי (Constructor Injection), אך נשכח להוסיף אותו למתודה `RegisterViews()` או `RegisterViewModels()`?  
+   * **תשובה**: בעת ניווט אל הדף ב-Shell תיזרק שגיאת זמן-ריצה (`InvalidOperationException`), מכיוון שה-DI Container לא יידע כיצד ליצור את הדף או להזריק לו את ה-ViewModel המבוקש.
+
+
 
