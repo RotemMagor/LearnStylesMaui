@@ -1,5 +1,5 @@
 #if DEBUG
-using Microsoft.Maui.DevFlow.Agent;
+//using Microsoft.Maui.DevFlow.Agent;
 #endif
 using Microsoft.Extensions.Logging;
 using LearnStylesMaui.ViewModels;
@@ -98,7 +98,7 @@ namespace LearnStylesMaui
 		{
 #if DEBUG
 			builder.Logging.AddDebug();
-			builder.AddMauiDevFlowAgent();
+			//builder.AddMauiDevFlowAgent();
 #endif
 			return builder;
 		}

@@ -76,7 +76,7 @@
                     <!-- דירוג כוכבים לבדיקת ממיר הכוכבים של התלמיד -->
                     <VerticalStackLayout Spacing="4">
                         <Label Text="{Binding DifficultyStars, StringFormat='רמת קושי / כוכבים לבדיקה: {0} מתוך 5'}" FontAttributes="Bold" FontSize="13" />
-                        <Stepper Minimum="1" Maximum="5" Increment="1" Value="{Binding DifficultyStars}" HorizontalOptions="Start" />
+                        <Stepper Minimum="0" Maximum="5" Increment="1" Value="{Binding DifficultyStars}" HorizontalOptions="Start" />
                     </VerticalStackLayout>
 
                     <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
@@ -91,9 +91,9 @@
                     <!-- TODO לתלמיד: החלף את Style="{StaticResource CardBorder}"      -->
                     <!-- בסגנון המותאם שיצרת: Style="{StaticResource StudentCustomCard}" -->
                     <!-- ============================================================== -->
-                    <Border Style="{StaticResource CardBorder}" BackgroundColor="#FAFAFA">
+                    <Border Style="{StaticResource StudentCustomCard}" BackgroundColor="#FAFAFA">
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="{Binding StudentName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Text="{Binding DifficultyStars,Converter={StaticResource StersConverter}}" FontSize="18" FontAttributes="Bold" />
 
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="ציון מחושב:" FontAttributes="Bold" />
